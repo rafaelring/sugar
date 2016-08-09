@@ -433,6 +433,16 @@ begin
   async try
     var lConnection := java.net.URL(aRequest.URL).openConnection as java.net.HttpURLConnection;
 
+     case aRequest.Mode of
+       HttpRequestMode.Get: lConnection.setRequestMethod("GET");
+       HttpRequestMode.Post: lConnection.setRequestMethod("POST");
+       HttpRequestMode.Head: lConnection.setRequestMethod("HEAD");
+       HttpRequestMode.Put: lConnection.setRequestMethod("PUT");
+       HttpRequestMode.Delete: lConnection.setRequestMethod("DELETE");
+       HttpRequestMode.Options: lConnection.setRequestMethod("OPTIONS");
+       HttpRequestMode.Trace: lConnection.setRequestMethod("TRACE");
+    end;
+
     for each k in aRequest.Headers.Keys do
       lConnection.setRequestProperty(k, aRequest.Headers[k]);
     
@@ -553,6 +563,16 @@ method Http.ExecuteRequestSynchronous(aRequest: not nullable HttpRequest): not n
 begin
   {$IF COOPER}
   var lConnection := java.net.URL(aRequest.URL).openConnection as java.net.HttpURLConnection;
+  
+  case aRequest.Mode of
+    HttpRequestMode.Get: lConnection.setRequestMethod("GET");
+    HttpRequestMode.Post: lConnection.setRequestMethod("POST");
+    HttpRequestMode.Head: lConnection.setRequestMethod("HEAD");
+    HttpRequestMode.Put: lConnection.setRequestMethod("PUT");
+    HttpRequestMode.Delete: lConnection.setRequestMethod("DELETE");
+    HttpRequestMode.Options: lConnection.setRequestMethod("OPTIONS");
+    HttpRequestMode.Trace: lConnection.setRequestMethod("TRACE");
+  end;
   
   for each k in aRequest.Headers.Keys do
     lConnection.setRequestProperty(k, aRequest.Headers[k]);
